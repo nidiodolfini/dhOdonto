@@ -2,6 +2,7 @@ package com.dh.dhOdonto.controller;
 
 import com.dh.dhOdonto.entity.Dentista;
 import com.dh.dhOdonto.entity.dto.DentistaRequestDTO;
+import com.dh.dhOdonto.entity.dto.DentistaResponseDTO;
 import com.dh.dhOdonto.exceptions.CadastroInvalidoException;
 import com.dh.dhOdonto.exceptions.ResourceNotFoundException;
 import com.dh.dhOdonto.service.DentistaService;
@@ -36,5 +37,10 @@ public class DentistaController {
     @DeleteMapping
     public void excluir(@RequestParam("matricula") String matricula) throws ResourceNotFoundException {
         dentistaService.excluir(matricula);}
+
+    @PatchMapping
+    public ResponseEntity alterar(@RequestBody DentistaResponseDTO dentista) throws ResourceNotFoundException {
+        return dentistaService.alterar(dentista);
+    }
 }
 

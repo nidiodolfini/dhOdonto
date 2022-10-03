@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class DentistaService {
     @Autowired
-    DentistaRepository dentistaRepository;
+    DentistaRepository repository;
 
     ObjectMapper mapper = new ObjectMapper();
     Logger logger = Logger.getLogger(DentistaService.class);
@@ -30,7 +30,7 @@ public class DentistaService {
         try {
             dentista.setMatricula();
             dentista.encodePassword();
-            dentistaCadastrado = dentistaRepository.save(dentista);
+            dentistaCadastrado = repository.save(dentista);
         } catch (Exception e) {
             logger.error("Erro ao cadastrar dentista");
             logger.error(e.getMessage());
@@ -41,7 +41,7 @@ public class DentistaService {
     }
 
     public ResponseEntity buscarDentistaPorMatricula(String matricula) throws ResourceNotFoundException {
-        Dentista dentista = dentistaRepository.findByMatricula(matricula);
+        Dentista dentista = repository.findByMatricula(matricula);
         if(dentista == null) {
             logger.error("Dentista não encontrado");
             throw new ResourceNotFoundException("Dentista não encontrado");
@@ -55,7 +55,7 @@ public class DentistaService {
     }
 
     public ResponseEntity buscarTodos() throws ResourceNotFoundException {
-        List<Dentista> dentistaList = dentistaRepository.findAll();
+        List<Dentista> dentistaList = repository.findAll();
         if (dentistaList.isEmpty()){
             throw  new ResourceNotFoundException("Nenhum dentista cadastrado");
         }
@@ -69,8 +69,8 @@ public class DentistaService {
 
     public void excluir(String matricula) throws ResourceNotFoundException {
         try{
-            Dentista dentista = dentistaRepository.findByMatricula(matricula);
-            dentistaRepository.delete(dentista);
+            Dentista dentista = repository.findByMatricula(matricula);
+            repository.delete(dentista);
 
             logger.info("Dentista excluído com sucesso!");
         }catch (Exception exception){
@@ -79,6 +79,27 @@ public class DentistaService {
         }
     }
 
+    public ResponseEntity alterar(DentistaResponseDTO dentistaResponseDTO) throws ResourceNotFoundException {
+        logger.info("Alterando dentista");
+        try {
+            Dentista dentistaAlterarado = repository.findByMatricula(dentistaResponseDTO.getMatricula());
+            if (dentistaResponseDTO.getNome() != null) {
+                dentistaAlterarado.setNome(dentistaResponseDTO.getNome());
+            }
+            if (dentistaResponseDTO.getSobrenome() != null) {
+                dentistaAlterarado.setSobrenome(dentistaResponseDTO.getSobrenome());
+            }
+            if (dentistaResponseDTO.getUsuario().getUsername() != null) {
+                dentistaAlterarado.getUsuario().setUsername(dentistaResponseDTO.getUsuario().getUsername());
+            }
+            return new ResponseEntity(mapper.convertValue(
+                                                        repository.save(dentistaAlterarado),
+                                                        DentistaResponseDTO.class)
+                                        ,HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException("Erro ao alterar dentista: "+ex.getMessage());
+        }
+    }
 
 
 }

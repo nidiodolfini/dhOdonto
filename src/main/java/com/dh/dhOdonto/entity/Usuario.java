@@ -25,14 +25,16 @@ public class Usuario implements UserDetails {
 
     @NotEmpty
     @Size(min = 6)
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @NotEmpty
     @Size(min = 6)
+    @Column(nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Column(nullable = false)
     private List<Perfil> perfis;
 
 

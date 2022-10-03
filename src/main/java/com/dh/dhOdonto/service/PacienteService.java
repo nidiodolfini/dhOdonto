@@ -22,7 +22,7 @@ import java.util.List;
 public class PacienteService {
 
     @Autowired
-    PacienteRepository pacienteRepository;
+    PacienteRepository repository;
     ObjectMapper mapper = new ObjectMapper();
     Logger logger = Logger.getLogger(PacienteService.class);
 
@@ -35,7 +35,7 @@ public class PacienteService {
             paciente.encodePassword();
             paciente.setDataCadastro();
             paciente.getUsuario().setPerfis(Arrays.asList(new Perfil(1L)));
-            pacienteCadastrado = pacienteRepository.save(paciente);
+            pacienteCadastrado = repository.save(paciente);
         } catch (Exception e) {
             logger.error("Erro ao cadastrar paciente");
             logger.error(e.getMessage());
@@ -47,8 +47,8 @@ public class PacienteService {
 
     public void excluir(String matricula) throws ResourceNotFoundException {
         try{
-            Paciente paciente = pacienteRepository.findByMatricula(matricula);
-            pacienteRepository.delete(paciente);
+            Paciente paciente = repository.findByMatricula(matricula);
+            repository.delete(paciente);
 
             logger.info("Paciente excluído com sucesso!");
         }catch (Exception exception){
@@ -58,7 +58,7 @@ public class PacienteService {
     }
 
     public ResponseEntity buscaPorMatricula (String matricula) throws ResourceNotFoundException {
-        Paciente paciente = pacienteRepository.findByMatricula(matricula);
+        Paciente paciente = repository.findByMatricula(matricula);
         if(paciente == null){
             logger.error("Paciente não encontrado");
             throw  new ResourceNotFoundException("Paciente não encontrado");
@@ -71,7 +71,7 @@ public class PacienteService {
 
     public ResponseEntity buscarTodos () throws ResourceNotFoundException {
 
-        List<Paciente> pacienteList = pacienteRepository.findAll();
+        List<Paciente> pacienteList = repository.findAll();
         if (pacienteList.isEmpty()){
             throw  new ResourceNotFoundException("Nenhum paciente cadastrado");
         }
@@ -84,6 +84,26 @@ public class PacienteService {
 
     }
 
+    public ResponseEntity alterar(PacienteResponseDTO pacienteResponseDTO) throws ResourceNotFoundException {
+        logger.info("Alterando paciente");
+        try {
+            Paciente pacienteAlterado = repository.findByMatricula(pacienteResponseDTO.getMatricula());
+            if (pacienteResponseDTO.getNome() != null) {
+                pacienteAlterado.setNome(pacienteResponseDTO.getNome());
+            }
+            if (pacienteResponseDTO.getSobrenome() != null) {
+                pacienteAlterado.setSobrenome(pacienteResponseDTO.getSobrenome());
+            }
+            if (pacienteResponseDTO.getUsuario().getUsername() != null) {
+                pacienteAlterado.getUsuario().setUsername(pacienteResponseDTO.getUsuario().getUsername());
+            }
+            return new ResponseEntity(mapper.convertValue(repository.save(pacienteAlterado),
+                                        PacienteResponseDTO.class),
+                                        HttpStatus.OK);
+        } catch (Exception ex) {
+            throw new ResourceNotFoundException("Erro ao alterar paciente");
+        }
+    }
 
 }
 

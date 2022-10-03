@@ -22,7 +22,7 @@ public class Paciente {
     private String nome;
     @Column(nullable = false)
     private String sobrenome;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String matricula;
 
     @OneToOne(cascade = CascadeType.ALL)
