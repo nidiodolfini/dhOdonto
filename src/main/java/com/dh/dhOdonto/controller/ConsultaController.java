@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.Timestamp;
 
 @RestController
@@ -19,12 +20,12 @@ public class ConsultaController {
     ConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity cadastrar(@RequestBody ConsultaDTO consultaDTO) throws CadastroInvalidoException {
+    public ResponseEntity cadastrar(@RequestBody @Valid ConsultaDTO consultaDTO) throws CadastroInvalidoException {
         return consultaService.cadastrar(consultaDTO);
     }
 
     @DeleteMapping
-    public void deletar(@RequestBody ConsultaDTO consultaDTO) throws ResourceNotFoundException {
+    public void deletar(@RequestBody @Valid ConsultaDTO consultaDTO) throws ResourceNotFoundException {
         consultaService.deletar(consultaDTO.getDentista().getMatricula()
                 ,consultaDTO.getDataHoraAgendamento());
     }
