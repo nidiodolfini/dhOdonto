@@ -38,9 +38,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/consulta").permitAll()
                 .antMatchers(HttpMethod.GET,"/dentista", "/paciente").permitAll()
                 .antMatchers("/auth","/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/paciente").permitAll()//.hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST,"/dentista").permitAll()//.hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/consulta").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/paciente").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/dentista").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/consulta").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(autenticacaoViaTokenFilter, UsernamePasswordAuthenticationFilter.class);
