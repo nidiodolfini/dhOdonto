@@ -20,7 +20,7 @@ public class DentistaController {
     DentistaService dentistaService;
 
     @PostMapping
-    public ResponseEntity cadastrar(@RequestBody @Valid DentistaRequestDTO dentista) throws CadastroInvalidoException {
+    public ResponseEntity cadastrar(@RequestBody  DentistaRequestDTO dentista) throws CadastroInvalidoException {
 
         return dentistaService.cadastrar(dentista);
 
@@ -41,7 +41,7 @@ public class DentistaController {
         dentistaService.excluir(matricula);}
 
     @PatchMapping
-    public ResponseEntity alterar(@RequestBody @Valid DentistaResponseDTO dentista) throws ResourceNotFoundException {
+    public ResponseEntity alterar(@RequestBody  DentistaResponseDTO dentista) throws ResourceNotFoundException {
         return dentistaService.alterar(dentista);
     }
 }

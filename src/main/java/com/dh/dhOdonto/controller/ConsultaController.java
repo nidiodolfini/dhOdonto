@@ -7,6 +7,7 @@ import com.dh.dhOdonto.exceptions.ResourceNotFoundException;
 import com.dh.dhOdonto.service.ConsultaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +21,12 @@ public class ConsultaController {
     ConsultaService consultaService;
 
     @PostMapping
-    public ResponseEntity cadastrar(@RequestBody @Valid ConsultaDTO consultaDTO) throws CadastroInvalidoException {
+    public ResponseEntity cadastrar(@RequestBody  ConsultaDTO consultaDTO) throws CadastroInvalidoException {
         return consultaService.cadastrar(consultaDTO);
     }
 
     @DeleteMapping
-    public void deletar(@RequestBody @Valid ConsultaDTO consultaDTO) throws ResourceNotFoundException {
+    public void deletar(@RequestBody ConsultaDTO consultaDTO) throws ResourceNotFoundException {
         consultaService.deletar(consultaDTO.getDentista().getMatricula()
                 ,consultaDTO.getDataHoraAgendamento());
     }
@@ -38,5 +39,6 @@ public class ConsultaController {
             return consultaService.buscaTodos();
         }
     }
+
 }
 

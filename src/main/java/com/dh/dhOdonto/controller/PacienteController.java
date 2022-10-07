@@ -20,7 +20,7 @@ public class PacienteController {
     PacienteService pacienteService;
 
     @PostMapping
-    public ResponseEntity cadastrar(@RequestBody @Valid PacienteRequestDTO pacienteRequestDTO) throws CadastroInvalidoException {
+    public ResponseEntity cadastrar(@RequestBody  PacienteRequestDTO pacienteRequestDTO) throws CadastroInvalidoException {
         return pacienteService.cadastrar(pacienteRequestDTO);
     }
 
@@ -40,7 +40,7 @@ public class PacienteController {
 
 
     @PatchMapping
-    public ResponseEntity alterar(@RequestBody @Valid PacienteResponseDTO pacienteResponseDTO) throws ResourceNotFoundException {
+    public ResponseEntity alterar(@RequestBody  PacienteResponseDTO pacienteResponseDTO) throws ResourceNotFoundException {
         return pacienteService.alterar(pacienteResponseDTO);
     }
 }
