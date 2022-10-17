@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("/consulta")
+@CrossOrigin("*")
 public class ConsultaController {
     @Autowired
     ConsultaService consultaService;
